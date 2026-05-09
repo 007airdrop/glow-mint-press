@@ -1,0 +1,10 @@
+{
+  "name": "Solar Sovereign",
+  "description": "A legendary reward from Press to Start. One in twenty. Burn bright.",
+  "image": "ipfs://REPLACE_WITH_IMAGE_CID/legendary.png",
+  "attributes": [
+    { "trait_type": "Rarity", "value": "Legendary" },
+    { "trait_type": "Tier", "value": 4 },
+    { "trait_type": "Drop Rate", "value": "5%" }
+  ]
+}

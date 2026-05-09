@@ -1,0 +1,10 @@
+{
+  "name": "Pulse Shard",
+  "description": "A common reward from Press to Start. A whisper from the chain.",
+  "image": "ipfs://REPLACE_WITH_IMAGE_CID/common.png",
+  "attributes": [
+    { "trait_type": "Rarity", "value": "Common" },
+    { "trait_type": "Tier", "value": 1 },
+    { "trait_type": "Drop Rate", "value": "50%" }
+  ]
+}
