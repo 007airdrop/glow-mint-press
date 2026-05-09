@@ -1,0 +1,10 @@
+{
+  "name": "Azure Relic",
+  "description": "A rare reward from Press to Start. Forged in deep blocks.",
+  "image": "ipfs://REPLACE_WITH_IMAGE_CID/rare.png",
+  "attributes": [
+    { "trait_type": "Rarity", "value": "Rare" },
+    { "trait_type": "Tier", "value": 3 },
+    { "trait_type": "Drop Rate", "value": "15%" }
+  ]
+}
