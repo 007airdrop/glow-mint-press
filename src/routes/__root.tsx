@@ -108,12 +108,23 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { Web3Providers } from "@/components/Providers";
+import { NavBar, MobileTabs } from "@/components/NavBar";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Outlet />
-    </QueryClientProvider>
+    <Web3Providers>
+      <QueryClientProvider client={queryClient}>
+        <div className="relative min-h-screen flex flex-col">
+          <NavBar />
+          <main className="relative z-10 flex-1 pb-24 sm:pb-6">
+            <Outlet />
+          </main>
+          <MobileTabs />
+        </div>
+      </QueryClientProvider>
+    </Web3Providers>
   );
 }
