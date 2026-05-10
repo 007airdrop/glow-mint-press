@@ -28,10 +28,40 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Tap a glowing button. Pull randomized ERC-1155 NFTs on Base. Streaks, leaderboards, Farcaster sharing." },
       { property: "og:title", content: "Press to Start" },
       { property: "og:description", content: "Tap. Roll. Mint randomized NFTs on Base." },
-      // Farcaster Frame v2 minimal embed
-      { property: "fc:frame", content: "vNext" },
-      { property: "fc:frame:image", content: "https://og.lovable.dev/?title=Press%20to%20Start" },
-      { property: "fc:frame:button:1", content: "Press to Start" },
+      // Farcaster Mini App embed (renders a launch card in feeds)
+      {
+        property: "fc:miniapp",
+        content: JSON.stringify({
+          version: "1",
+          imageUrl: "https://og.lovable.dev/?title=Press%20to%20Start",
+          button: {
+            title: "Press to Start",
+            action: {
+              type: "launch_miniapp",
+              name: "Press to Start",
+              url: "https://id-preview--f4327af5-b337-47a6-8918-c066e87f8a04.lovable.app",
+              splashBackgroundColor: "#0b0220",
+            },
+          },
+        }),
+      },
+      // Backwards-compat for older Frame parsers
+      {
+        property: "fc:frame",
+        content: JSON.stringify({
+          version: "1",
+          imageUrl: "https://og.lovable.dev/?title=Press%20to%20Start",
+          button: {
+            title: "Press to Start",
+            action: {
+              type: "launch_frame",
+              name: "Press to Start",
+              url: "https://id-preview--f4327af5-b337-47a6-8918-c066e87f8a04.lovable.app",
+              splashBackgroundColor: "#0b0220",
+            },
+          },
+        }),
+      },
     ],
   }),
   component: HomePage,
