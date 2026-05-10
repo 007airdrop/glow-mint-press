@@ -8,6 +8,7 @@
         "@cloudflare/vite-plugin": "^1.25.5",
         "@coinbase/onchainkit": "^1.1.2",
         "@farcaster/miniapp-sdk": "^0.3.0",
+        "@farcaster/miniapp-wagmi-connector": "^2.0.0",
         "@hookform/resolvers": "^5.2.2",
         "@radix-ui/react-accordion": "^1.2.12",
         "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -233,7 +234,7 @@
 
     "@farcaster/miniapp-sdk": ["@farcaster/miniapp-sdk@0.3.0", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/miniapp-sdk/-/miniapp-sdk-0.3.0.tgz", { "dependencies": { "@farcaster/miniapp-core": "0.6.0", "@farcaster/quick-auth": "^0.0.6", "comlink": "^4.4.2", "eventemitter3": "^5.0.1", "ox": "^0.14.0" } }, "sha512-mxze24B5SSLwqpPqUmzthfsGGPeevJvDuOEbLJay1DDgPS/B0LswA0XXfz4d6pViA7Y4TkbeAPMAfuVZ9nIqgQ=="],
 
-    "@farcaster/miniapp-wagmi-connector": ["@farcaster/miniapp-wagmi-connector@1.1.1", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/miniapp-wagmi-connector/-/miniapp-wagmi-connector-1.1.1.tgz", { "peerDependencies": { "@farcaster/miniapp-sdk": "^0.2.3", "@wagmi/core": "^2.14.1", "viem": "^2.21.55" } }, "sha512-sdKhRRZcbM1XXl6Z49UTLlgRBYMmyxM6z4KE3LTWQtjRzlc0JwGaxmjvhjl3mZNZFnyUAlhpoU7RfCJ4c2aTGg=="],
+    "@farcaster/miniapp-wagmi-connector": ["@farcaster/miniapp-wagmi-connector@2.0.0", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/miniapp-wagmi-connector/-/miniapp-wagmi-connector-2.0.0.tgz", { "peerDependencies": { "@farcaster/miniapp-sdk": "^0.3.0", "@wagmi/core": "^2.14.1", "viem": "^2.21.55" } }, "sha512-Ek41lXTc79SJSZYL06EXMSpz4q4fnrisMaU8B9IZWH/pt7L4IrblnjjYZGC/a0PITCqWgOPkgLNbP08+4Q3PDg=="],
 
     "@farcaster/quick-auth": ["@farcaster/quick-auth@0.0.6", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/quick-auth/-/quick-auth-0.0.6.tgz", { "dependencies": { "jose": "^5.2.3", "zod": "^3.25.1" }, "peerDependencies": { "typescript": "5.8.3" } }, "sha512-tiZndhpfDtEhaKlkmS5cVDuS+A/tafqZT3y9I44rC69m3beJok6e8dIH2JhxVy3EvOWTyTBnrmNn6GOOh+qK6A=="],
 
@@ -1415,6 +1416,8 @@
 
     "@coinbase/onchainkit/@farcaster/miniapp-sdk": ["@farcaster/miniapp-sdk@0.1.10", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/miniapp-sdk/-/miniapp-sdk-0.1.10.tgz", { "dependencies": { "@farcaster/miniapp-core": "0.3.9", "@farcaster/quick-auth": "^0.0.6", "comlink": "^4.4.2", "eventemitter3": "^5.0.1", "ox": "^0.4.4" } }, "sha512-ueoEAH3N7hIrV+L9pXdLJZpOY1GsOuwKN7MckouSEWY98H5A7KVajyGmGSDDVzjRWpu7Vndu4NZUHoOhF4nTOA=="],
 
+    "@coinbase/onchainkit/@farcaster/miniapp-wagmi-connector": ["@farcaster/miniapp-wagmi-connector@1.1.1", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/miniapp-wagmi-connector/-/miniapp-wagmi-connector-1.1.1.tgz", { "peerDependencies": { "@farcaster/miniapp-sdk": "^0.2.3", "@wagmi/core": "^2.14.1", "viem": "^2.21.55" } }, "sha512-sdKhRRZcbM1XXl6Z49UTLlgRBYMmyxM6z4KE3LTWQtjRzlc0JwGaxmjvhjl3mZNZFnyUAlhpoU7RfCJ4c2aTGg=="],
+
     "@cspotcode/source-map-support/@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.9", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.0.3", "@jridgewell/sourcemap-codec": "^1.4.10" } }, "sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ=="],
 
     "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
@@ -1538,6 +1541,8 @@
     "@coinbase/onchainkit/@farcaster/miniapp-sdk/@farcaster/miniapp-core": ["@farcaster/miniapp-core@0.3.9", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/miniapp-core/-/miniapp-core-0.3.9.tgz", { "dependencies": { "@solana/web3.js": "^1.98.2", "ox": "^0.4.4", "zod": "^3.25.0" } }, "sha512-7k2AHYycFABUEQFHGqsuZr6P6UQOE2WO4/Qj/kQ1ydKA8QjrWxO4HjiPfnTdvqH0xOKtdavbFOV5lK5bDLkemw=="],
 
     "@coinbase/onchainkit/@farcaster/miniapp-sdk/ox": ["ox@0.4.4", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/ox/-/ox-0.4.4.tgz", { "dependencies": { "@adraffy/ens-normalize": "^1.10.1", "@noble/curves": "^1.6.0", "@noble/hashes": "^1.5.0", "@scure/bip32": "^1.5.0", "@scure/bip39": "^1.4.0", "abitype": "^1.0.6", "eventemitter3": "5.0.1" }, "peerDependencies": { "typescript": ">=5.4.0" }, "optionalPeers": ["typescript"] }, "sha512-oJPEeCDs9iNiPs6J0rTx+Y0KGeCGyCAA3zo94yZhm8G5WpOxrwUtn2Ie/Y8IyARSqqY/j9JTKA3Fc1xs1DvFnw=="],
+
+    "@coinbase/onchainkit/@farcaster/miniapp-wagmi-connector/@farcaster/miniapp-sdk": ["@farcaster/miniapp-sdk@0.3.0", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@farcaster/miniapp-sdk/-/miniapp-sdk-0.3.0.tgz", { "dependencies": { "@farcaster/miniapp-core": "0.6.0", "@farcaster/quick-auth": "^0.0.6", "comlink": "^4.4.2", "eventemitter3": "^5.0.1", "ox": "^0.14.0" } }, "sha512-mxze24B5SSLwqpPqUmzthfsGGPeevJvDuOEbLJay1DDgPS/B0LswA0XXfz4d6pViA7Y4TkbeAPMAfuVZ9nIqgQ=="],
 
     "@typescript-eslint/typescript-estree/minimatch/brace-expansion": ["brace-expansion@5.0.5", "", { "dependencies": { "balanced-match": "^4.0.2" } }, "sha512-VZznLgtwhn+Mact9tfiwx64fA9erHH/MCXEUfB/0bX/6Fz6ny5EGTXYltMocqg4xFAQZtnO3DHWWXi8RiuN7cQ=="],
 
