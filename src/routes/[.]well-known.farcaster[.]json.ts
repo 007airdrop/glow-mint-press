@@ -52,7 +52,7 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
             name: "Press to Start",
             iconUrl: `${origin}/icon.png`,
             homeUrl: origin,
-            imageUrl: "https://og.lovable.dev/?title=Press%20to%20Start",
+            imageUrl: `${origin}/cover.png`,
             buttonTitle: "Press to Start",
             splashImageUrl: `${origin}/icon.png`,
             splashBackgroundColor: "#0b0220",

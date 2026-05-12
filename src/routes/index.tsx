@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
         property: "fc:miniapp",
         content: JSON.stringify({
           version: "1",
-          imageUrl: "https://og.lovable.dev/?title=Press%20to%20Start",
+          imageUrl: "https://glow-mint-press.lovable.app/cover.png",
           button: {
             title: "Press to Start",
             action: {
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/")({
         property: "fc:frame",
         content: JSON.stringify({
           version: "1",
-          imageUrl: "https://og.lovable.dev/?title=Press%20to%20Start",
+          imageUrl: "https://glow-mint-press.lovable.app/cover.png",
           button: {
             title: "Press to Start",
             action: {
