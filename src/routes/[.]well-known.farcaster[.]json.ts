@@ -39,9 +39,15 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
         // otherwise Warpcast / Base App will report "does not have a valid
         // manifest setup."
         const accountAssociation = {
-          header: process.env.FARCASTER_HEADER ?? "",
-          payload: process.env.FARCASTER_PAYLOAD ?? "",
-          signature: process.env.FARCASTER_SIGNATURE ?? "",
+          header:
+            process.env.FARCASTER_HEADER ||
+            "eyJmaWQiOjUzMDg4MCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweERGMTI2NkY3Njg1MWZEODYwMEM2MDhCMWNlMDFlNDlGMDlkMERBM0QifQ",
+          payload:
+            process.env.FARCASTER_PAYLOAD ||
+            "eyJkb21haW4iOiJnbG93LW1pbnQtcHJlc3MubG92YWJsZS5hcHAifQ",
+          signature:
+            process.env.FARCASTER_SIGNATURE ||
+            "kSs9Ws2QNV4no/FUGHyujzpEW5s8dDHsoO0mZ77WIFN0CWuj/2vv2mBUvCq4hfgD5ExM9s7Z35N82JFaw88aNhw=",
         };
 
         const manifest: Record<string, unknown> = {
