@@ -114,7 +114,6 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 import { Web3Providers } from "@/components/Providers";
 import { NavBar, MobileTabs } from "@/components/NavBar";
-import { MiniAppReady } from "@/components/MiniAppReady";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -122,7 +121,6 @@ function RootComponent() {
   return (
     <Web3Providers>
       <QueryClientProvider client={queryClient}>
-        <MiniAppReady />
         <div className="relative min-h-screen flex flex-col">
           <NavBar />
           <main className="relative z-10 flex-1 pb-24 sm:pb-6">
