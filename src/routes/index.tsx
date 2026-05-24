@@ -21,6 +21,8 @@ import {
 import { isContractConfigured } from "@/lib/contract";
 import { RewardCard } from "@/components/RewardCard";
 
+const APP_URL = "https://glow-mint-press.lovable.app";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -33,13 +35,13 @@ export const Route = createFileRoute("/")({
         property: "fc:miniapp",
         content: JSON.stringify({
           version: "1",
-          imageUrl: "https://glow-mint-press.lovable.app/cover.png",
+          imageUrl: `${APP_URL}/cover.png`,
           button: {
             title: "Press to Start",
             action: {
               type: "launch_miniapp",
               name: "Press to Start",
-              url: "https://id-preview--f4327af5-b337-47a6-8918-c066e87f8a04.lovable.app",
+              url: APP_URL,
               splashBackgroundColor: "#0b0220",
             },
           },
@@ -50,13 +52,13 @@ export const Route = createFileRoute("/")({
         property: "fc:frame",
         content: JSON.stringify({
           version: "1",
-          imageUrl: "https://glow-mint-press.lovable.app/cover.png",
+          imageUrl: `${APP_URL}/cover.png`,
           button: {
             title: "Press to Start",
             action: {
               type: "launch_frame",
               name: "Press to Start",
-              url: "https://id-preview--f4327af5-b337-47a6-8918-c066e87f8a04.lovable.app",
+              url: APP_URL,
               splashBackgroundColor: "#0b0220",
             },
           },
