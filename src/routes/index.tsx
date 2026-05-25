@@ -4,7 +4,10 @@ import { useAccount } from "wagmi";
 import { PressButton } from "@/components/PressButton";
 import { RewardReveal } from "@/components/RewardReveal";
 import { StreakBadge } from "@/components/StreakBadge";
-import { rollRarity, type Rarity, RARITY_META } from "@/lib/rarity";
+import { StreakRewards } from "@/components/StreakRewards";
+import { InventoryHUD } from "@/components/InventoryHUD";
+import { SupplyStrip, ExtinctBanner } from "@/components/SoldOutBanner";
+import { rollRarity, type Rarity } from "@/lib/rarity";
 import {
   addReward,
   getLastMint,
@@ -18,6 +21,14 @@ import {
   getRewards,
   type Streak,
 } from "@/lib/storage";
+import {
+  consumeDailyOpen,
+  consumeSerial,
+  getOpensLeft,
+  getMintedCounts,
+  isSoldOut,
+  SUPPLY_CAPS,
+} from "@/lib/supply";
 import { isContractConfigured } from "@/lib/contract";
 import { RewardCard } from "@/components/RewardCard";
 
@@ -30,7 +41,6 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Tap a glowing button. Pull randomized ERC-1155 NFTs on Base. Streaks, leaderboards, Farcaster sharing." },
       { property: "og:title", content: "Press to Start" },
       { property: "og:description", content: "Tap. Roll. Mint randomized NFTs on Base." },
-      // Farcaster Mini App embed (renders a launch card in feeds)
       {
         property: "fc:miniapp",
         content: JSON.stringify({
@@ -47,7 +57,6 @@ export const Route = createFileRoute("/")({
           },
         }),
       },
-      // Backwards-compat for older Frame parsers
       {
         property: "fc:frame",
         content: JSON.stringify({
@@ -70,17 +79,21 @@ export const Route = createFileRoute("/")({
 });
 
 const COOLDOWN_MS = 60_000;
+const TENSION_MS = 2500; // intensity 3: ~2.5s build-up before reveal
 
 function HomePage() {
   const { address, isConnected } = useAccount();
-  const [reveal, setReveal] = useState<Rarity | null>(null);
+  const [reveal, setReveal] = useState<{ rarity: Rarity; serial: number } | null>(null);
   const [rolling, setRolling] = useState(false);
   const [now, setNow] = useState(Date.now());
   const [streak, setStreak] = useState<Streak>({ count: 0, lastDay: "" });
   const [referrals, setReferrals] = useState(0);
   const [recent, setRecent] = useState<Rarity[]>([]);
+  const [opensLeft, setOpensLeft] = useState(10);
+  const [hudPulse, setHudPulse] = useState(false);
+  const [extinct, setExtinct] = useState<Rarity | null>(null);
+  const [tick, setTick] = useState(0); // force supply strip refresh
 
-  // Capture referrer from URL
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
@@ -88,7 +101,6 @@ function HomePage() {
     if (ref) setReferrer(ref);
   }, []);
 
-  // Hydrate per-wallet state
   useEffect(() => {
     if (!address) return;
     setStreak(getStreak(address));
@@ -100,9 +112,9 @@ function HomePage() {
       setReferrals(getReferralCount(address));
     }
     setRecent(getRewards(address).slice(0, 4).map((r) => r.rarity));
+    setOpensLeft(getOpensLeft(address));
   }, [address]);
 
-  // Cooldown ticker
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
@@ -117,12 +129,41 @@ function HomePage() {
   const cooldownLabel =
     cooldownRemaining > 0 ? `${Math.ceil(cooldownRemaining / 1000)}s` : undefined;
 
+  const userRewards = useMemo(
+    () => (address ? getRewards(address) : []),
+    [address, reveal, tick]
+  );
+  const legendaryCount = useMemo(
+    () => userRewards.filter((r) => r.rarity === "Legendary").length,
+    [userRewards]
+  );
+
   const handlePress = async () => {
-    if (!address || cooldownRemaining > 0 || rolling) return;
+    if (!address || cooldownRemaining > 0 || rolling || opensLeft === 0) return;
     setRolling(true);
-    // Roll suspense
-    await new Promise((r) => setTimeout(r, 900));
-    const rarity = rollRarity();
+    // Tension build-up
+    await new Promise((r) => setTimeout(r, TENSION_MS));
+
+    // Re-roll if rarity is sold out (drop to next available tier)
+    let rarity = rollRarity();
+    const order: Rarity[] = ["Legendary", "Rare", "Uncommon", "Common"];
+    if (isSoldOut(rarity)) {
+      const fallback = order.find((r) => !isSoldOut(r));
+      if (!fallback) {
+        setRolling(false);
+        return;
+      }
+      rarity = fallback;
+    }
+
+    const serial = consumeSerial(rarity);
+
+    // Check if this mint exhausted the tier
+    if (serial === SUPPLY_CAPS[rarity]) {
+      setExtinct(rarity);
+      setTimeout(() => setExtinct(null), 5000);
+    }
+
     addReward(address, {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       rarity,
@@ -130,13 +171,20 @@ function HomePage() {
     });
     setLastMint(address, Date.now());
     setStreak(tickStreak(address));
+    consumeDailyOpen(address);
+    setOpensLeft(getOpensLeft(address));
     setRecent((r) => [rarity, ...r].slice(0, 4));
-    setReveal(rarity);
+    setReveal({ rarity, serial });
+    setHudPulse(true);
+    setTimeout(() => setHudPulse(false), 500);
+    setTick((t) => t + 1);
     setRolling(false);
   };
 
   return (
-    <div className="px-4 sm:px-6 max-w-3xl mx-auto flex flex-col items-center gap-6">
+    <div className="px-4 sm:px-6 max-w-3xl mx-auto flex flex-col items-center gap-5">
+      <ExtinctBanner rarity={extinct} onClose={() => setExtinct(null)} />
+
       <section className="text-center pt-4 sm:pt-8">
         <div className="inline-flex glass rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.3em] opacity-80">
           {isContractConfigured ? "Live on Base" : "Mock mint mode"}
@@ -146,18 +194,18 @@ function HomePage() {
           <span className="text-gradient">Pull a rarity.</span>
         </h1>
         <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
-          A Farcaster mini-game on Base. Common to Legendary — every press
+          A Farcaster mini-game on Base. Capped supply, real serial numbers, every press
           mints an ERC-1155.
         </p>
       </section>
 
-      <RarityOdds />
+      <SupplyStrip key={tick} />
 
       <PressButton
         onPress={handlePress}
         loading={rolling}
-        disabled={!isConnected}
-        cooldownLabel={cooldownLabel}
+        disabled={!isConnected || opensLeft === 0}
+        cooldownLabel={opensLeft === 0 ? "0/day" : cooldownLabel}
       />
 
       {!isConnected && (
@@ -166,7 +214,18 @@ function HomePage() {
         </div>
       )}
 
-      {isConnected && <StreakBadge streak={streak} referrals={referrals} />}
+      {isConnected && (
+        <>
+          <InventoryHUD
+            total={userRewards.length}
+            legendary={legendaryCount}
+            opensLeft={opensLeft}
+            pulse={hudPulse}
+          />
+          <StreakBadge streak={streak} referrals={referrals} />
+          <StreakRewards streak={streak.count} />
+        </>
+      )}
 
       {recent.length > 0 && (
         <section className="w-full">
@@ -181,26 +240,7 @@ function HomePage() {
         </section>
       )}
 
-      <RewardReveal rarity={reveal} onClose={() => setReveal(null)} />
-    </div>
-  );
-}
-
-function RarityOdds() {
-  const order: Rarity[] = ["Common", "Uncommon", "Rare", "Legendary"];
-  const odds: Record<Rarity, string> = { Common: "50%", Uncommon: "30%", Rare: "15%", Legendary: "5%" };
-  return (
-    <div className="grid grid-cols-4 gap-2 w-full max-w-md">
-      {order.map((r) => {
-        const m = RARITY_META[r];
-        return (
-          <div key={r} className="glass rounded-xl p-2 text-center">
-            <div className="text-2xl" style={{ color: m.color }}>{m.emoji}</div>
-            <div className="text-[10px] uppercase tracking-wider opacity-70 mt-1">{r}</div>
-            <div className="text-xs font-semibold" style={{ color: m.color }}>{odds[r]}</div>
-          </div>
-        );
-      })}
+      <RewardReveal payload={reveal} onClose={() => setReveal(null)} />
     </div>
   );
 }
