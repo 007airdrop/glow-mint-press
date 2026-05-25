@@ -4,16 +4,28 @@ import { AnimatePresence, motion } from "framer-motion";
 import { RARITY_META, type Rarity } from "@/lib/rarity";
 import { RewardCard } from "./RewardCard";
 import { ShareButton } from "./ShareButton";
+import { SUPPLY_CAPS } from "@/lib/supply";
+import {
+  sfxRevealCommon,
+  sfxRevealLegendary,
+  sfxRevealRare,
+  sfxRevealUncommon,
+} from "@/lib/sound";
+
+type Payload = { rarity: Rarity; serial: number };
 
 export function RewardReveal({
-  rarity,
+  payload,
   onClose,
 }: {
-  rarity: Rarity | null;
+  payload: Payload | null;
   onClose: () => void;
 }) {
   useEffect(() => {
+    if (!payload) return;
+    const { rarity } = payload;
     if (rarity === "Legendary") {
+      sfxRevealLegendary();
       const fire = (particleRatio: number, opts: confetti.Options) => {
         confetti({
           origin: { y: 0.6 },
@@ -28,13 +40,18 @@ export function RewardReveal({
       fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
       fire(0.1, { spread: 120, startVelocity: 45 });
     } else if (rarity === "Rare") {
+      sfxRevealRare();
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 }, colors: ["#3b82f6", "#a855f7"] });
+    } else if (rarity === "Uncommon") {
+      sfxRevealUncommon();
+    } else {
+      sfxRevealCommon();
     }
-  }, [rarity]);
+  }, [payload]);
 
   return (
     <AnimatePresence>
-      {rarity && (
+      {payload && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -47,16 +64,22 @@ export function RewardReveal({
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring", stiffness: 240, damping: 20 }}
-            className="glass-strong rounded-[2rem] p-8 max-w-sm w-full flex flex-col items-center gap-6"
+            className="glass-strong rounded-[2rem] p-8 max-w-sm w-full flex flex-col items-center gap-5"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-xs uppercase tracking-[0.4em] opacity-70">You received</div>
-            <RewardCard rarity={rarity} size="lg" />
+            <RewardCard rarity={payload.rarity} size="lg" />
+            <div
+              className="font-mono text-sm tracking-[0.25em] uppercase"
+              style={{ color: RARITY_META[payload.rarity].color }}
+            >
+              {payload.rarity} #{payload.serial} / {SUPPLY_CAPS[payload.rarity]}
+            </div>
             <p className="text-center text-sm text-muted-foreground italic">
-              {RARITY_META[rarity].tagline}
+              {RARITY_META[payload.rarity].tagline}
             </p>
             <div className="flex flex-col gap-2 w-full">
-              <ShareButton rarity={rarity} />
+              <ShareButton rarity={payload.rarity} serial={payload.serial} />
               <button
                 onClick={onClose}
                 className="glass rounded-full py-3 text-sm font-medium hover:bg-white/10 transition"

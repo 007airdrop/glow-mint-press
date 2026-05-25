@@ -1,7 +1,8 @@
 import { RARITY_META, type Rarity } from "@/lib/rarity";
+import { SUPPLY_CAPS } from "@/lib/supply";
 import { useAccount } from "wagmi";
 
-export function ShareButton({ rarity }: { rarity: Rarity }) {
+export function ShareButton({ rarity, serial }: { rarity: Rarity; serial?: number }) {
   const { address } = useAccount();
 
   const handleShare = () => {
@@ -10,7 +11,8 @@ export function ShareButton({ rarity }: { rarity: Rarity }) {
       typeof window !== "undefined"
         ? `${window.location.origin}${address ? `?ref=${address}` : ""}`
         : "";
-    const text = `I just pulled a ${rarity} ${meta.name} ${meta.emoji} on Press to Start!\n\nMint your own on Base 👇`;
+    const serialLabel = serial ? ` #${serial}/${SUPPLY_CAPS[rarity]}` : "";
+    const text = `I just pulled ${rarity}${serialLabel} — ${meta.name} ${meta.emoji}\n\nPress the button on Base 👇`;
     const intent = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(url)}`;
     if (typeof window !== "undefined") window.open(intent, "_blank");
   };
