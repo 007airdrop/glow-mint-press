@@ -46,21 +46,39 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
             "kSs9Ws2QNV4no/FUGHyujzpEW5s8dDHsoO0mZ77WIFN0CWuj/2vv2mBUvCq4hfgD5ExM9s7Z35N82JFaw88aNhw=",
         };
 
+        // miniapp block is the canonical Base App / Farcaster v1 manifest.
+        // `frame` is kept as a back-compat alias for older clients.
+        const miniapp = {
+          version: "1",
+          name: "Press to Start",
+          subtitle: "Pull rarity NFTs on Base",
+          description:
+            "Tap a glowing button. Pull randomized ERC-1155 NFTs on Base. Streaks, serials, capped supply.",
+          iconUrl: `${origin}/icon.png`,
+          homeUrl: origin,
+          imageUrl: `${origin}/cover.png`,
+          buttonTitle: "Press to Start",
+          splashImageUrl: `${origin}/icon.png`,
+          splashBackgroundColor: "#0b0220",
+          primaryCategory: "games",
+          tags: ["nft", "base", "rewards", "rarity", "baseapp"],
+          ogTitle: "Press to Start",
+          ogDescription: "Tap. Roll. Mint rarity NFTs on Base.",
+          ogImageUrl: `${origin}/cover.png`,
+          heroImageUrl: `${origin}/cover.png`,
+          tagline: "Press. Pull. Flex.",
+          requiredChains: ["eip155:8453"],
+          requiredCapabilities: [
+            "actions.ready",
+            "wallet.getEthereumProvider",
+          ],
+          noindex: false,
+        };
+
         const manifest: Record<string, unknown> = {
-          miniapp: {
-            version: "1",
-            name: "Press to Start",
-            iconUrl: `${origin}/icon.png`,
-            homeUrl: origin,
-            imageUrl: `${origin}/cover.png`,
-            buttonTitle: "Press to Start",
-            splashImageUrl: `${origin}/icon.png`,
-            splashBackgroundColor: "#0b0220",
-            primaryCategory: "games",
-            tags: ["nft", "base", "rewards", "rarity"],
-            description:
-              "Tap a glowing button. Pull randomized ERC-1155 NFTs on Base.",
-          },
+          miniapp,
+          // Back-compat: some clients still read `frame`.
+          frame: miniapp,
         };
 
         // Only include accountAssociation when it's actually signed — an
